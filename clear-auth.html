@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Authentication - EduLearn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 EduLearn Authentication Fix</h1>
+        <p>If you're having login issues, click the button below to clear your authentication data and try logging in again.</p>
+        
+        <button class="btn" onclick="clearAuth()">Clear Authentication Data</button>
+        <button class="btn" onclick="goToApp()">Go to EduLearn</button>
+        
+        <div id="message" style="margin-top: 20px;"></div>
+        
+        <hr style="margin: 30px 0;">
+        
+        <h3>What this does:</h3>
+        <ul style="text-align: left;">
+            <li>Clears your stored login token</li>
+            <li>Clears your user data</li>
+            <li>Forces a fresh login</li>
+            <li>Fixes authentication issues</li>
+        </ul>
+    </div>
+
+    <script>
+        function clearAuth() {
+            try {
+                // Clear localStorage
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.clear();
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                
+                // Clear cookies (if any)
+                document.cookie.split(";").forEach(function(c) { 
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                });
+                
+                document.getElementById('message').innerHTML = '<p class="success">✅ Authentication data cleared successfully!<br>You can now try logging in again.</p>';
+                
+                setTimeout(() => {
+                    window.location.href = 'http://localhost:3000/login';
+                }, 2000);
+                
+            } catch (error) {
+                document.getElementById('message').innerHTML = '<p style="color: red;">❌ Error: ' + error.message + '</p>';
+            }
+        }
+        
+        function goToApp() {
+            window.location.href = 'http://localhost:3000';
+        }
+        
+        // Auto-clear on page load
+        window.onload = function() {
+            document.getElementById('message').innerHTML = '<p>Ready to clear authentication data. Click the button above if you\'re having login issues.</p>';
+        }
+    </script>
+</body>
+</html>
+
